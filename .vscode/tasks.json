@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build MyLang",
+            "type": "shell",
+            "command": "g++", 
+            "args": [
+                "-g", 
+                "-std=c++17", 
+                "src/cpp/main.cpp",
+                "src/cpp/Environment.cpp",
+                "src/cpp/Lexer.cpp",
+                "src/cpp/Parser.cpp",
+                "src/cpp/Interpreter.cpp",
+                "src/cpp/Value.cpp", 
+                "-o", 
+                "MyLang.exe", 
+                "-I${workspaceFolder}/src/hpp" 
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}" 
+            },
+            "problemMatcher": [
+                "$gcc" 
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Builds the MyLang interpreter"
+        }
+    ]
+}

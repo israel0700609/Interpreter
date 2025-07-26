@@ -1,0 +1,94 @@
+let a = 10;
+let b = 5;
+print a + b;
+print a - b;
+print a * b;
+print a / b;
+print a % 3;
+
+let greeting = "Hello, ";
+let name = "World!";
+print greeting + name;
+
+let is_true = True;
+let is_false = False;
+print is_true;
+print is_false;
+
+print True && False;
+print True || False;
+print !True;
+
+if (a > b) {
+    print "a is greater than b";
+} else {
+    print "a is not greater than b";
+}
+
+if (a < b) {
+    print "a is less than b";
+} else {
+    print "a is not less than b";
+}
+
+let counter = 0;
+while (counter < 3) {
+    print "Loop iteration: " + counter;
+    counter = counter + 1;
+}
+
+function add(num1,num2)
+{
+    return num1+num2;
+}
+
+function multiply(num1, num2) {
+    return num1 * num2;
+}
+
+let result = multiply(7, 8);
+print "Function result: " + result;
+
+print "Current time (seconds since epoch): " + clock();
+
+let myArray = [10, "hello", True, 3.14];
+print myArray[0];
+print myArray[1];
+print myArray[2];
+print myArray[3];
+
+
+
+
+let num = 10;
+num++;
+print "num after ++: " + num;
+
+num--;
+print "num after --: " + num;
+
+num += 5;
+print "num after += 5: " + num;
+
+num -= 3;
+print "num after -= 3: " + num;
+
+num *= 2;
+print "num after *= 2: " + num;
+
+num /= 4;
+print "num after /= 4: " + num;
+
+let global_var = 100;
+function showGlobal() {
+    print "Inside function, global_var: " + global_var;
+}
+showGlobal();
+
+function doNothing() {
+    
+}
+let nothing = doNothing();
+print "Result of doNothing(): " + nothing;
+
+print "result: " + multiply(add(2, 3), 4);

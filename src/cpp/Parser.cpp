@@ -1,12 +1,13 @@
-﻿#include "../hpp/Parser.hpp"
-#include "../hpp/Token.hpp"
+﻿#include "../hpp/Parser.hpp" 
+#include "../hpp/Token.hpp"  
 #include <stdexcept>
 #include <iostream> 
+#include "../hpp/AST.hpp"    
 
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {
     std::cout << "DEBUG: Parser constructor called. Total tokens received: " << tokens.size() << std::endl;
     if (!tokens.empty()) {
-        std::cout << "DEBUG: First token received in parser: '" << tokens[0].getLexeme() << "' (" << (int)tokens[0].getTokenType() << ")" << std::endl;
+        std::cout << "DEBUG: First token received in parser: '" << tokens[0].getLexeme() << "' (Type: " << (int)tokens[0].getTokenType() << ")" << std::endl;
     }
     else {
         std::cout << "DEBUG: Parser received an empty token list." << std::endl;
@@ -201,7 +202,7 @@ std::unique_ptr<Expression> Parser::parseFactor() {
     while (match({ TokenType::Star, TokenType::Slash ,TokenType::Modulo})) {
         std::cout << "DEBUG: Matched Star or Slash, current token: '" << peek().getLexeme() << "'" << std::endl;
         Token op = previous();
-      
+        
         std::unique_ptr<Expression> right = parseUnary();
         expr = std::make_unique<BinaryExpr>(std::move(expr), std::move(right), op.getLexeme());
     }
@@ -227,9 +228,6 @@ std::unique_ptr<Expression> Parser::parseUnary() {
     return parseCall();
 }
 
-
-
-
 std::unique_ptr<Expression> Parser::parseCall() {
     std::cout << "DEBUG: Entering parseCall(), current token: '" << peek().getLexeme() << "'" << std::endl;
     std::unique_ptr<Expression> expr = parsePrimary();
@@ -238,11 +236,11 @@ std::unique_ptr<Expression> Parser::parseCall() {
             std::cout << "DEBUG: Matched LParen for Call, current token: '" << peek().getLexeme() << "'" << std::endl;
             expr = finishCall(std::move(expr));
         }
-        else if (match({ TokenType::LeftSqaure }))
+        else if (match({ TokenType::LeftSquare })) 
         {
             std::cout << "DEBUG: Matched LeftSquare for index access, current token: '" << peek().getLexeme() << "'" << std::endl;
             std::unique_ptr<Expression> index = parseExpression();
-            consume(TokenType::RightSqaure, "Expect ] after index.");
+            consume(TokenType::RightSquare, "Expect ] after index."); 
             expr = std::make_unique<IndexExpr>(std::move(expr), std::move(index));
         }
         else {
@@ -252,9 +250,6 @@ std::unique_ptr<Expression> Parser::parseCall() {
     std::cout << "DEBUG: Exiting parseCall(), current token: '" << peek().getLexeme() << "'" << std::endl;
     return expr;
 }
-
-
-
 
 std::unique_ptr<Expression> Parser::finishCall(std::unique_ptr<Expression> callee) {
     std::cout << "DEBUG: Entering finishCall(), current token: '" << peek().getLexeme() << "'" << std::endl;
@@ -285,20 +280,20 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
     }
 
     if (match({ TokenType::Number })) {
-        double value = std::stod(previous().getLexeme()); // Convert string lexeme to double
+        double value = std::stod(previous().getLexeme()); 
         return std::make_unique<NumberExpr>(value);
     }
-    if (match({ TokenType::LeftSqaure }))
+    if (match({ TokenType::LeftSquare })) 
     {
         std::vector<std::unique_ptr<Expression>> elements;
-        if (!check(TokenType::RightSqaure))
+        if (!check(TokenType::RightSquare)) 
         {
             do
             {
                 elements.push_back(parseExpression());
             } while (match({ TokenType::Comma }));
         }
-        consume(TokenType::RightSqaure, "Expect ']' after array elements.");
+        consume(TokenType::RightSquare, "Expect ']' after array elements."); 
         return std::make_unique<ArrayExpr>(std::move(elements));
     }
     if (match({ TokenType::String })) {
@@ -306,7 +301,7 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
     }
 
     if (match({ TokenType::Identifier })) {
-        return std::make_unique<VariableExpr>(previous().getLexeme()); // VariableExpr takes string name
+        return std::make_unique<VariableExpr>(previous().getLexeme()); 
     }
 
     if (match({ TokenType::LParen })) {
@@ -337,7 +332,7 @@ std::unique_ptr<Statement> Parser::parseStatement() {
         size_t temp_current = current; 
         advance(); 
         if (check(TokenType::PlusPlus) || check(TokenType::MinusMinus)) {
-           
+            
             current = temp_current; 
             return parseUpdateStatement(false); 
         }
@@ -400,7 +395,6 @@ std::unique_ptr<Statement> Parser::parseUpdateStatement(bool isPrefix) {
     }
 
     consume(TokenType::Semicolon, "Expect ';' after update statement.");
-    // ---------------------
 
     std::cout << "DEBUG: Parsed " << (isPrefix ? "prefix" : "postfix") << " update: " << (isPrefix ? op.getLexeme() : "") << nameToken.getLexeme() << (isPrefix ? "" : op.getLexeme()) << std::endl;
     return std::make_unique<UpdateStatement>(std::move(nameToken), std::move(op), isPrefix);

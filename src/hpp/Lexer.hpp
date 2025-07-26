@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "./Token.hpp"
+#include "./Token.hpp" 
 
 std::vector<Token> tokenizeLine(const std::string& line, int currentLine);
-bool isNumber(const std::string& word);

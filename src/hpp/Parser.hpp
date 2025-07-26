@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include "Token.hpp"
-#include "AST.hpp"
+#include "AST.hpp"   
 
 class Parser
 {
@@ -12,13 +12,12 @@ private:
     const std::vector<Token>& tokens;
     int current = 0;
 
-
     const Token& peek()const;
     const Token& peekNext()const;
-    const Token& previous()const;                
-    bool isAtEnd() const;              
-    void advance();                   
-    bool check(TokenType type) const;  
+    const Token& previous()const; 
+    bool isAtEnd() const; 
+    void advance(); 
+    bool check(TokenType type) const; 
     bool match(std::initializer_list<TokenType> types); 
     Token consume(TokenType type, const std::string& message); 
 
